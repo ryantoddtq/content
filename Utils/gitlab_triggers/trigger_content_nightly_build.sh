@@ -10,7 +10,7 @@
 # 2. Utils/gitlab_triggers/trigger_content_nightly_build.sh <trigger-token>
 if [[ "$#" -lt 1 ]]; then
   echo "Usage: $0 <trigger-token> <branch-name>[current-branch as default]"
-  echo "See here to learn more about trigger tokens https://code.pan.run/help/ci/triggers/README#trigger-token" # disable-secrets-detection
+  echo "Get the trigger token from here https://vault.paloaltonetworks.local/home#R2VuZXJpY1NlY3JldERldGFpbHM6RGF0YVZhdWx0OmIyMzJiNDU0LWEzOWMtNGY5YS1hMTY1LTQ4YjRlYzM1OTUxMzpSZWNvcmRJbmRleDowOklzVHJ1bmNhdGVk" # disable-secrets-detection
   exit 1
 fi
 _gitlab_token=$1
