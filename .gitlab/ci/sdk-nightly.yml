@@ -25,6 +25,18 @@ demisto_sdk_nightly:setup:
     - |
       demisto-sdk create-id-set -o ./Tests/id_set.json >> $ARTIFACTS_FOLDER/logs/create_id_set.log 2>&1
       cp ./Tests/id_set.json $ARTIFACTS_FOLDER
+    - |
+      gcloud auth activate-service-account --key-file="$GCS_MARKET_KEY" >> $ARTIFACTS_FOLDER/logs/auths.log 2>&1
+      echo "successfully activated google cloud service account"
+    - |
+      # Download private ID set
+      gsutil cp gs://marketplace-dist/content/private_id_set.json $ARTIFACTS_FOLDER/unified_id_set.json
+      echo "successfully downloaded private ID set"
+    - gcloud auth revoke >> $ARTIFACTS_FOLDER/logs/auths.log 2>&1
+    - |
+      # Merge public and private ID sets
+      demisto-sdk merge-id-sets -i1 $ARTIFACTS_FOLDER/id_set.json -i2 $ARTIFACTS_FOLDER/unified_id_set.json -o $ARTIFACTS_FOLDER/unified_id_set.json
+      echo "successfully merged public and private ID sets"
 
 
 demisto_sdk_nightly:check_idset_dependent_commands:
@@ -40,18 +52,6 @@ demisto_sdk_nightly:check_idset_dependent_commands:
   variables:
     IS_NIGHTLY: "false"
   script:
-    - |
-      gcloud auth activate-service-account --key-file="$GCS_MARKET_KEY" >> $ARTIFACTS_FOLDER/logs/auths.log 2>&1
-      echo "successfully activated google cloud service account"
-    - |
-      # Download private ID set
-      gsutil cp gs://marketplace-dist/content/private_id_set.json $ARTIFACTS_FOLDER/unified_id_set.json
-      echo "successfully downloaded private ID set"
-    - gcloud auth revoke >> $ARTIFACTS_FOLDER/logs/auths.log 2>&1
-    - |
-      # Merge public and private ID sets
-      demisto-sdk merge-id-sets -i1 $ARTIFACTS_FOLDER/id_set.json -i2 $ARTIFACTS_FOLDER/unified_id_set.json -o $ARTIFACTS_FOLDER/unified_id_set.json
-      echo "successfully merged public and private ID sets"
     - echo "=== Build Content Descriptor ==="
     - python3 Utils/release_notes_generator.py $CONTENT_VERSION $CI_COMMIT_SHA $CI_BUILD_ID --output $ARTIFACTS_FOLDER/packs-release-notes.md --github-token $GITHUB_TOKEN
     - cp content-descriptor.json $ARTIFACTS_FOLDER

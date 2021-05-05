@@ -1,5 +1,5 @@
 .default-image:
-  image: docker-io.artifactory.pan.local/devdemisto/gitlab-content-ci:1.0.0.18863
+  image: devdemisto/gitlab-content-ci:1.0.0.18863
 
 
 .default-cache:
@@ -23,12 +23,6 @@
     paths:
       - /builds/xsoar/content/artifacts/*
     when: always
-
-
-.download-configuration:
-  script:
-    - echo "======= Download configuration ========"
-    - ./Tests/scripts/download_demisto_conf.sh  >> $ARTIFACTS_FOLDER/logs/installations.log
 
 
 .default-before_script:
