@@ -25,6 +25,12 @@
     when: always
 
 
+.download-configuration:
+  script:
+    - echo "======= Download configuration ========"
+    - ./Tests/scripts/download_demisto_conf.sh  >> $ARTIFACTS_FOLDER/logs/installations.log
+
+
 .default-before_script:
   before_script:
     - echo "=== Running before script ==="
@@ -68,9 +74,6 @@
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
 
-    - echo "======= Download configuration ========"
-    - ./Tests/scripts/download_demisto_conf.sh  >> $ARTIFACTS_FOLDER/logs/installations.log
-
     - echo "========== Build Parameters =========="
     - set | grep -E "^NIGHTLY=|^INSTANCE_TESTS=|^SERVER_BRANCH_NAME=|^ARTIFACT_BUILD_NUM=|^DEMISTO_SDK_NIGHTLY=|^TIME_TO_LIVE=|^CONTRIB_BRANCH=|^FORCE_PACK_UPLOAD=|^PACKS_TO_UPLOAD=|^BUCKET_UPLOAD=|^GCS_MARKET_BUCKET=|^SLACK_CHANNEL="
     - python --version
@@ -78,7 +81,6 @@
     - node --version
     - npm --version
     - demisto-sdk --version
-    - which python
 
 
 .default-job-settings:

@@ -7,6 +7,7 @@ create-instances:
   extends: 
     - .default-job-settings
     - .push-rule
+    - .download-configuration
   cache:
     policy: pull-push
   needs: []
