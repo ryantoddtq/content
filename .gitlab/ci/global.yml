@@ -78,6 +78,7 @@
     - node --version
     - npm --version
     - demisto-sdk --version
+    - which python
 
 
 .default-job-settings:
